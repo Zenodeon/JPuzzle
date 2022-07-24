@@ -138,19 +138,15 @@ public class PuzzleBoard : MonoBehaviour
 
     private void SetMoveableTiles(Vector2 emptyTileCoord)
     {
-        Debug.Log("Last Coord : " + emptyTileCoord);
         moveableTiles.Clear();
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Vector2 nearByTileCoord = emptyTileCoord + tileDirTable[i];
-
             if (tileCoordList.ContainsKey(nearByTileCoord))
             {
                 BoardInput.InputDir inputDir = (BoardInput.InputDir)i;
 
                 Tile moveableTile = tileCoordList[nearByTileCoord];
-                moveableTile.moveableDirection = inputDir;
-
                 moveableTiles.Add(inputDir, moveableTile);
             }
         }
@@ -163,10 +159,16 @@ public class PuzzleBoard : MonoBehaviour
 
         if (moveableTiles.ContainsKey(input))
         {
-            //moving = true;
+            moving = true;
             Vector2 moveDir = tileDirTable[(int)input] * -1;
             moveableTiles[input].Move(moveDir);
         }
+    }
+
+    public void OnTileMoved(Vector2 previousTileCoord)
+    {
+        SetMoveableTiles(previousTileCoord);
+        moving = false;
     }
 
     public readonly List<Vector2> tileDirTable = new List<Vector2>() 
