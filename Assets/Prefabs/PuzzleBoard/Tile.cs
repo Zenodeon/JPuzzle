@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] public TextMeshProUGUI tmp;
     [Space]
+    [ReadOnly] public int indexID;
     [ReadOnly] public Vector2 ID;
     [ReadOnly] public Vector2 coords;
     [ReadOnly] public Vector2 previousCoords;
@@ -22,10 +23,12 @@ public class Tile : MonoBehaviour
 
     public UnityEvent<Tile, Vector2> OnMoved = new UnityEvent<Tile, Vector2>();
 
-    public void Setup(Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
+    public void Setup(int indexID, Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
     {
+        this.indexID = indexID;
         this.ID = ID;
-        tmp.text = ID.x + "," + ID.y;
+        tmp.text = indexID + "";
+        //tmp.text = ID.x + "," + ID.y;
         coords = ID;
 
         UpdateTransform(size, spacing, offset);

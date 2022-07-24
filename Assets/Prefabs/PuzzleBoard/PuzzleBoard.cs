@@ -25,6 +25,8 @@ public class PuzzleBoard : MonoBehaviour
 
     public bool moving = false;
 
+    public int moves = 0;
+
     private void OnValidate()
     {
         UpdateBGBoardSize();
@@ -80,16 +82,19 @@ public class PuzzleBoard : MonoBehaviour
 
     private void PlaceTiles()
     {
+        int index = 0;
         for (int y = 0; y < gridSize.y; y++)
             for (int x = 0; x < gridSize.x; x++)
             {
                 Vector2 coord = new Vector2(x, -y);
 
                 Tile tile = GameObject.Instantiate(tilePrefab, tileHolderRect);
-                tile.Setup(coord, tileSize, tileSpacing, tileSize * borderTilePercent);
+                tile.Setup(index, coord, tileSize, tileSpacing, tileSize * borderTilePercent);
 
                 tileIDList.Add(coord, tile);
                 tiles.Add(tile);
+
+                index ++;
             }
     }
 
@@ -180,10 +185,36 @@ public class PuzzleBoard : MonoBehaviour
 
         tileCoordList.Remove(previousTileCoord);
         tileCoordList.Add(movedTile.coords, movedTile);
-        
-        moving = false;
 
-        SetMoveableTiles(previousTileCoord);
+        bool gameWon = CheckTileOrder();
+
+        if (gameWon)
+        {
+            Debug.Log("Game : " + moves);
+        }
+        else
+        {
+            moves++;
+            moving = false;
+            SetMoveableTiles(previousTileCoord);
+        }
+    }
+
+    private bool CheckTileOrder()
+    {
+        for (int y = 0; y < gridSize.y; y++)
+            for (int x = 0; x < gridSize.x; x++)
+            {
+                if (gridSize == new Vector2(x + 1, y + 1))
+                    break;
+
+                Vector2 coord = new Vector2(x, -y);
+
+                if (tileIDList[coord].coords != coord)
+                    return false;
+            }
+
+        return true;
     }
 
     public readonly List<Vector2> tileDirTable = new List<Vector2>() 
