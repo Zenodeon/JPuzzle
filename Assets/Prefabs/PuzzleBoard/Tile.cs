@@ -17,8 +17,6 @@ public class Tile : MonoBehaviour
     private Vector2 spacing;
     private Vector2 offset;
 
-    public BoardInput.InputDir moveableDirection = BoardInput.InputDir.None;
-
     public void Setup(Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
     {
         this.ID = ID;
@@ -45,7 +43,7 @@ public class Tile : MonoBehaviour
 
     public void Move(Vector2 dir)
     {
-        Debug.Log(ID + " : " + dir + " : " + moveableDirection.ToString());
+        Debug.Log(ID + " : " + dir);
         coords += dir;
         UpdateTransform();
     }
