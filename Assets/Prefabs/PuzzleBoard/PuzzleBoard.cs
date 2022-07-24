@@ -25,9 +25,12 @@ public class PuzzleBoard : MonoBehaviour
     public List<Tile> tiles = new List<Tile>();
     public Dictionary<BoardInput.InputDir, Tile> moveableTiles = new Dictionary<BoardInput.InputDir, Tile>();
 
-    public bool moving = false;
-
     public int moves = 0;
+
+    private bool settingUp;
+    private int tileShuffedCount = 0;
+
+    private bool moving = false;
 
     private Vector2 lastDir = Vector2.zero;
 
@@ -74,9 +77,11 @@ public class PuzzleBoard : MonoBehaviour
 
     void Start()
     {
+        settingUp = true;
+
         PlaceTiles();
         RemoveLastTile();
-        ShuffleTiles();
+        ShuffleTile(tileShuffedCount);
     }
 
     void Update()
@@ -112,22 +117,20 @@ public class PuzzleBoard : MonoBehaviour
         }
     }
 
-    private void ShuffleTiles()
+    private void ShuffleTile(int index)
     {
-        for (int i = 0; i < shuffleCount; i++)
+        if (index > 200)
         {
-            var randomDir = GetVaildRandomDir();
-
-            Tile tile = moveableTiles[randomDir.Item1];
-            Vector2 oldCoord = tile.coords;
-
-            tile.Move(randomDir.Item2);
-
-            tileCoordList.Remove(oldCoord);
-            tileCoordList.Add(tile.coords, tile);
-
-            SetMoveableTiles(oldCoord);
+            settingUp = false;
+            return;
         }
+
+        var randomDir = GetVaildRandomDir();
+
+        Tile tile = moveableTiles[randomDir.Item1];
+
+        tile.OnMoved.AddListener(OnTileMoved);
+        tile.Move(randomDir.Item2, setupMode: true);
     }
 
     private (BoardInput.InputDir, Vector2) GetVaildRandomDir()
@@ -144,17 +147,18 @@ public class PuzzleBoard : MonoBehaviour
 
     private (BoardInput.InputDir, Vector2) GetBestDir(List<BoardInput.InputDir> vaildDir)
     {
-        var selectedDir = vaildDir[Random.Range(0, vaildDir.Count - 1)];
+        var index = Random.Range(0, vaildDir.Count - 1);
+        var inputDir = vaildDir[index];
 
-        Vector2 moveDir = tileDirTable[(int)selectedDir] * -1;
+        Vector2 moveDir = tileDirTable[(int)inputDir] * -1;
 
-        if (moveDir == lastDir * -1)
-        {
-            vaildDir.Remove(selectedDir);
-            return GetBestDir(vaildDir);
-        }
+        //if (moveDir == lastDir * -1)
+        //{
+        //    vaildDir.Remove(inputDir);
+        //    return GetBestDir(vaildDir);
+        //}
 
-        return (selectedDir, moveDir);
+        return (inputDir, moveDir);
     }
 
     private void RemoveLastTile()
@@ -210,24 +214,33 @@ public class PuzzleBoard : MonoBehaviour
         }
     }
 
-    public void OnTileMoved(Tile movedTile, Vector2 previousTileCoord)
+    public void OnTileMoved(Tile movedTile, Vector2 previousTileCoord, bool setupMode)
     {
+        Debug.Log(movedTile.coords);
         movedTile.OnMoved.RemoveListener(OnTileMoved);
 
         tileCoordList.Remove(previousTileCoord);
         tileCoordList.Add(movedTile.coords, movedTile);
 
-        bool gameWon = CheckTileOrder();
-
-        if (gameWon)
+        if (setupMode)
         {
-            Debug.Log("Game : " + moves);
+            SetMoveableTiles(previousTileCoord);
+            ShuffleTile(tileShuffedCount++);
         }
         else
         {
-            moves++;
-            moving = false;
-            SetMoveableTiles(previousTileCoord);
+            bool gameWon = CheckTileOrder();
+
+            if (gameWon)
+            {
+                Debug.Log("Game : " + moves);
+            }
+            else
+            {
+                moves++;
+                moving = false;
+                SetMoveableTiles(previousTileCoord);
+            }
         }
     }
 
