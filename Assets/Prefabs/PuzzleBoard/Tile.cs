@@ -12,6 +12,8 @@ public class Tile : MonoBehaviour
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] public TextMeshProUGUI tmp;
     [Space]
+    [SerializeField] public AnimationCurve moveCurve;
+    [Space]
     [ReadOnly] public int indexID;
     [ReadOnly] public Vector2 ID;
     [ReadOnly] public Vector2 coords;
@@ -52,11 +54,15 @@ public class Tile : MonoBehaviour
     public void Move(Vector2 dir)
     {
         previousCoords = coords;
-        coords += dir;
 
-        UpdateTransform();
+        LerpTransform(coords + dir);
 
         OnMoved.Invoke(this, previousCoords);
+    }
+
+    private void LerpTransform(Vector2 newCoord)
+    {
+        
     }
 
     public void ShowDirection(BoardInput.InputDir dir)
