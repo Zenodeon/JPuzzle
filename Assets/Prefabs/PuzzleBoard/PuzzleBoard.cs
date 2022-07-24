@@ -131,6 +131,7 @@ public class PuzzleBoard : MonoBehaviour
 
         tiles.Remove(lastTile);
         tileIDList.Remove(lastTileID);
+        tileCoordList.Remove(lastTile.coords);
         Destroy(lastTile.gameObject);
 
         SetMoveableTiles(emptyTileCoord);
@@ -138,7 +139,10 @@ public class PuzzleBoard : MonoBehaviour
 
     private void SetMoveableTiles(Vector2 emptyTileCoord)
     {
+        foreach(Tile tile in moveableTiles.Values)
+            tile.ShowDirection(BoardInput.InputDir.None);
         moveableTiles.Clear();
+
         for (int i = 0; i < 4; i++)
         {
             Vector2 nearByTileCoord = emptyTileCoord + tileDirTable[i];
@@ -148,6 +152,8 @@ public class PuzzleBoard : MonoBehaviour
 
                 Tile moveableTile = tileCoordList[nearByTileCoord];
                 moveableTiles.Add(inputDir, moveableTile);
+
+                moveableTile.ShowDirection(inputDir);
             }
         }
     }
@@ -161,14 +167,23 @@ public class PuzzleBoard : MonoBehaviour
         {
             moving = true;
             Vector2 moveDir = tileDirTable[(int)input] * -1;
-            moveableTiles[input].Move(moveDir);
+
+            Tile tile = moveableTiles[input];
+            tile.OnMoved.AddListener(OnTileMoved);
+            tile.Move(moveDir);
         }
     }
 
-    public void OnTileMoved(Vector2 previousTileCoord)
+    public void OnTileMoved(Tile movedTile, Vector2 previousTileCoord)
     {
-        SetMoveableTiles(previousTileCoord);
+        movedTile.OnMoved.RemoveListener(OnTileMoved);
+
+        tileCoordList.Remove(previousTileCoord);
+        tileCoordList.Add(movedTile.coords, movedTile);
+        
         moving = false;
+
+        SetMoveableTiles(previousTileCoord);
     }
 
     public readonly List<Vector2> tileDirTable = new List<Vector2>() 
