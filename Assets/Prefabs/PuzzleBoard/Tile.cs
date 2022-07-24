@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using TMPro;
 
 using NaughtyAttributes;
+using DG.Tweening;
 
 public class Tile : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Tile : MonoBehaviour
     private Vector2 spacing;
     private Vector2 offset;
 
-    public UnityEvent<Tile, Vector2> OnMoved = new UnityEvent<Tile, Vector2>();
+    public UnityEvent<Tile, Vector2, bool> OnMoved = new UnityEvent<Tile, Vector2, bool>();
 
     public void Setup(int indexID, Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
     {
@@ -51,18 +52,15 @@ public class Tile : MonoBehaviour
         rectTransform.anchoredPosition = (coords * (size + spacing)) + offset;
     }
 
-    public void Move(Vector2 dir)
+    public void Move(Vector2 dir, bool setupMode = false)
     {
         previousCoords = coords;
 
-        LerpTransform(coords + dir);
-
-        OnMoved.Invoke(this, previousCoords);
-    }
-
-    private void LerpTransform(Vector2 newCoord)
-    {
-        
+        Vector2 newCoord = coords + dir;
+        DOTween.To(() => coords, x => coords = x, newCoord, setupMode ? 0.05f : 2)
+            .SetEase(moveCurve)
+            .OnUpdate(UpdateTransform)
+            .OnComplete(() => OnMoved.Invoke(this, previousCoords, setupMode));
     }
 
     public void ShowDirection(BoardInput.InputDir dir)
