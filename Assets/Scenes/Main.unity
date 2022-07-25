@@ -400,11 +400,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: gridSize.x
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: gridSize.y
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: tileSize.x
@@ -413,6 +413,10 @@ PrefabInstance:
     - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: tileSize.y
       value: 175
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: shuffleCount
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: tileSpacing.x
@@ -426,13 +430,49 @@ PrefabInstance:
       propertyPath: borderTilePercent
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441363329838307762, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
+      propertyPath: tileMovementCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4620320729409035552, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 765
+      value: 580
       objectReference: {fileID: 0}
     - target: {fileID: 4620320729409035552, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 765
+      value: 580
       objectReference: {fileID: 0}
     - target: {fileID: 7008764754009874577, guid: 6a3322f6654ef7c4c80c0b7fc80d39ff, type: 3}
       propertyPath: m_RootOrder
