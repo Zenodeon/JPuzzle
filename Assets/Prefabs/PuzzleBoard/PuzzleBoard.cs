@@ -24,6 +24,7 @@ public class PuzzleBoard : MonoBehaviour
     public Dictionary<Vector2, Tile> tileIDList = new Dictionary<Vector2, Tile>();
     public Dictionary<Vector2, Tile> tileCoordList = new Dictionary<Vector2, Tile>();
     public Dictionary<Vector2, Tile> moveableTiles = new Dictionary<Vector2, Tile>();
+    public Dictionary<Vector2, List<Tile>> slidableTiles = new Dictionary<Vector2, List<Tile>>();
 
     public List<Tile> tiles = new List<Tile>();
 
@@ -83,6 +84,9 @@ public class PuzzleBoard : MonoBehaviour
 
         shuffleCount = (int)((gridSize.x * gridSize.y) * (gridSize.x + gridSize.y));
 
+        foreach (Vector2 dir in tileDirTable)
+            slidableTiles.Add(dir, new List<Tile>());
+
         PlaceTiles();
         RemoveLastTile();
         ShuffleTile(tileShuffedCount);
@@ -116,9 +120,7 @@ public class PuzzleBoard : MonoBehaviour
     private void UpdateTiles()
     {
         foreach (var tile in tileIDList)
-        {
             tile.Value.UpdateTransform(tileSize, tileSpacing, tileSize * borderTilePercent);
-        }
     }
 
     private void ShuffleTile(int index)
@@ -177,6 +179,7 @@ public class PuzzleBoard : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Vector2 lookingDir = tileDirTable[i];
+
             Vector2 nearByTileCoord = emptyTileCoord + lookingDir;
             if (tileCoordList.ContainsKey(nearByTileCoord))
             {
@@ -185,8 +188,28 @@ public class PuzzleBoard : MonoBehaviour
                 moveableTile.ShowDirection();
 
                 moveableTiles.Add(moveableTile.moveableDir, moveableTile);
+
+                slidableTiles[lookingDir] = GetTilesInDir(nearByTileCoord, lookingDir);
             }
         }
+    }
+
+    private List<Tile> GetTilesInDir(Vector2 startCoord, Vector2 dir)
+    {
+        Vector2 currentCoord = startCoord;
+        bool tileExistInDir() => tileCoordList.ContainsKey(currentCoord + dir);
+
+        List<Tile> slidableTiles = new List<Tile>();
+        while (tileExistInDir())
+        {
+            Tile slidableTile = tileCoordList[currentCoord += dir];
+
+            slidableTile.moveableDir = dir * -1;
+            slidableTile.ShowDirection();
+
+            slidableTiles.Add(slidableTile);
+        }
+        return slidableTiles;
     }
 
     private void ClearMoveableTiles()
@@ -197,6 +220,16 @@ public class PuzzleBoard : MonoBehaviour
             tile.ShowDirection();
         }
         moveableTiles.Clear();
+
+        foreach (List<Tile> tileList in slidableTiles.Values)
+        {
+            foreach (Tile tile in tileList)
+            {
+                tile.moveableDir = Vector2.zero;
+                tile.ShowDirection();
+            }
+            tileList.Clear();
+        }
     }
 
     public void OnKeyInput(BoardInput.InputDir input)
