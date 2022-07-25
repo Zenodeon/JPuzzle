@@ -13,6 +13,11 @@ public class Tile : MonoBehaviour
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] public TextMeshProUGUI tmp;
     [Space]
+    [SerializeField] private float setupMovementDuration = 0.03f;
+    [SerializeField] private float movementDuration = 0.08f;
+    [Space]
+    [SerializeField] private AnimationCurve movementCurve;
+    [Space]
     [ReadOnly] public int indexID;
     [ReadOnly] public Vector2 ID;
     [ReadOnly] public Vector2 coords;
@@ -31,7 +36,9 @@ public class Tile : MonoBehaviour
 
     public Vector2 moveableDir = Vector2.zero;
 
-    public UnityEvent<Tile, Vector2, bool> OnMoved = new UnityEvent<Tile, Vector2, bool>();
+    public bool masterSlider = false;
+
+    public UnityEvent<Tile, Vector2, int> OnMoved = new UnityEvent<Tile, Vector2, int>();
 
     public void Setup(PuzzleBoard board, int indexID, Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
     {
@@ -60,15 +67,15 @@ public class Tile : MonoBehaviour
         rectTransform.anchoredPosition = (coords * (size + spacing)) + offset;
     }
 
-    public void Move(AnimationCurve movementCurve, bool setupMode = false)
+    public void Move(int mode = 0)
     {
         previousCoords = coords;
 
         Vector2 newCoord = coords + moveableDir;
-        DOTween.To(() => coords, x => coords = x, newCoord, setupMode ? 0.04f : 0.1f)
+        DOTween.To(() => coords, x => coords = x, newCoord, mode == 1 ? setupMovementDuration : movementDuration)
             .SetEase(movementCurve)
             .OnUpdate(UpdateTransform)
-            .OnComplete(() => OnMoved.Invoke(this, previousCoords, setupMode));
+            .OnComplete(() => OnMoved.Invoke(this, previousCoords, mode));
     }
 
     public void SelfMove()

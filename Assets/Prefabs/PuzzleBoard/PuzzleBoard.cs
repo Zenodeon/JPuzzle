@@ -11,7 +11,6 @@ public class PuzzleBoard : MonoBehaviour
     [SerializeField] private Image bgBoard;
     [SerializeField] private RectTransform tileHolderRect;
     [SerializeField] private Tile tilePrefab;
-    [SerializeField] private AnimationCurve tileMovementCurve;
     [Space]
     [SerializeField] [ReadOnly] private int shuffleCount = 0;
     [Space]
@@ -23,6 +22,7 @@ public class PuzzleBoard : MonoBehaviour
 
     public Dictionary<Vector2, Tile> tileIDList = new Dictionary<Vector2, Tile>();
     public Dictionary<Vector2, Tile> tileCoordList = new Dictionary<Vector2, Tile>();
+    public Dictionary<Vector2, Tile> tileCoordListBuffer = new Dictionary<Vector2, Tile>();
     public Dictionary<Vector2, Tile> moveableTiles = new Dictionary<Vector2, Tile>();
     public Dictionary<Vector2, List<Tile>> slidableTiles = new Dictionary<Vector2, List<Tile>>();
 
@@ -36,6 +36,7 @@ public class PuzzleBoard : MonoBehaviour
     private bool moving = false;
 
     private Tile lastMovedTile;
+    private Vector2 emptyTileCoord;
 
     private void OnValidate()
     {
@@ -128,13 +129,14 @@ public class PuzzleBoard : MonoBehaviour
         if (index > shuffleCount)
         {
             settingUp = false;
+            SetMoveableTiles(emptyTileCoord);
             return;
         }
 
         Tile randomTile = GetRandomTile();
 
         randomTile.OnMoved.AddListener(OnTileMoved);
-        randomTile.Move(tileMovementCurve, setupMode: true);
+        randomTile.Move(mode: 1);
     }
 
     private Tile GetRandomTile(List<Tile> availTiles = null)
@@ -174,6 +176,7 @@ public class PuzzleBoard : MonoBehaviour
 
     private void SetMoveableTiles(Vector2 emptyTileCoord)
     {
+        this.emptyTileCoord = emptyTileCoord;
         ClearMoveableTiles();
 
         for (int i = 0; i < 4; i++)
@@ -189,7 +192,8 @@ public class PuzzleBoard : MonoBehaviour
 
                 moveableTiles.Add(moveableTile.moveableDir, moveableTile);
 
-                slidableTiles[lookingDir] = GetTilesInDir(nearByTileCoord, lookingDir);
+                if (!settingUp)
+                    slidableTiles[lookingDir] = GetTilesInDir(nearByTileCoord, lookingDir);
             }
         }
     }
@@ -242,20 +246,47 @@ public class PuzzleBoard : MonoBehaviour
             MoveTile(moveableTiles[movingDir]);
     }
 
-    public void OnTileMoved(Tile movedTile, Vector2 previousTileCoord, bool setupMode)
+    public void OnTileMoved(Tile movedTile, Vector2 previousTileCoord, int mode)
     {
         movedTile.OnMoved.RemoveListener(OnTileMoved);
 
         tileCoordList.Remove(previousTileCoord);
-        tileCoordList.Add(movedTile.coords, movedTile);
 
-        if (setupMode)
+        if (mode == 2)
         {
+            tileCoordListBuffer.Add(movedTile.coords, movedTile);
+            return;
+        }
+
+        if (mode == 1)
+        {
+            tileCoordList.Add(movedTile.coords, movedTile);
+
             SetMoveableTiles(previousTileCoord);
             ShuffleTile(tileShuffedCount++);
+            return;
         }
-        else
+
+        if (mode == 0)
         {
+            Vector2 emptyCoord = Vector2.one * -1;
+
+            foreach (var bufferTile in tileCoordListBuffer)
+            {
+                Tile tile = bufferTile.Value;
+
+                if (emptyCoord == (Vector2.one * -1) && tile.masterSlider)
+                {
+                    tile.masterSlider = false;
+                    emptyCoord = tile.previousCoords;
+                }
+
+                tileCoordList.Add(bufferTile.Key, tile);
+            }
+            tileCoordListBuffer.Clear();
+
+            tileCoordList.Add(movedTile.coords, movedTile);
+
             bool gameWon = CheckTileOrder();
 
             if (gameWon)
@@ -265,10 +296,14 @@ public class PuzzleBoard : MonoBehaviour
             }
             else
             {
+                if (emptyCoord == Vector2.one * -1)
+                    emptyCoord = previousTileCoord;
+
                 moves++;
                 moving = false;
-                SetMoveableTiles(previousTileCoord);
+                SetMoveableTiles(emptyCoord);
             }
+            return;
         }
     }
 
@@ -277,8 +312,31 @@ public class PuzzleBoard : MonoBehaviour
         if (moving)
             return;
 
-        if (moveableTiles.ContainsKey(tile.moveableDir))
-            MoveTile(tile);
+        if (!moveableTiles.ContainsKey(tile.moveableDir))
+            return;
+
+        List<Tile> tiles = slidableTiles[tile.moveableDir * -1];
+        if (tiles.Contains(tile))
+        {
+            tile.masterSlider = true;
+            int tileIndex = tiles.IndexOf(tile);
+            
+            moving = true;
+
+            int currentIndex = tileIndex++;
+            while (currentIndex >= 0)
+                SlideTile(tiles[currentIndex--]);
+
+            tile = moveableTiles[tile.moveableDir];
+        }
+
+        MoveTile(tile);
+    }
+
+    public void SlideTile(Tile tile)
+    {
+        tile.OnMoved.AddListener(OnTileMoved);
+        tile.Move(mode: 2);
     }
 
     public void MoveTile(Tile tile)
@@ -286,7 +344,7 @@ public class PuzzleBoard : MonoBehaviour
         moving = true;
 
         tile.OnMoved.AddListener(OnTileMoved);
-        tile.Move(tileMovementCurve);
+        tile.Move();
     }
 
     private bool CheckTileOrder()
