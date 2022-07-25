@@ -95,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -165,12 +165,37 @@ MonoBehaviour:
   bgBoard: {fileID: 5332518389559904264}
   tileHolderRect: {fileID: 5697874951076522336}
   tilePrefab: {fileID: 7363776512661407441, guid: cc83a378517ac5748a6294f3ec95e340, type: 3}
+  tileMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  shuffleCount: 0
   gridSize: {x: 2, y: 2}
   tileSize: {x: 0, y: 0}
   tileSpacing: {x: 0, y: 0}
   borderTilePercent: 0
   tiles: []
-  moving: 0
+  moves: 0
 --- !u!114 &4609994034644099969
 MonoBehaviour:
   m_ObjectHideFlags: 0
