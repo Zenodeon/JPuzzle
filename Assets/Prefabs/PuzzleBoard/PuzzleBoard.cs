@@ -38,6 +38,8 @@ public class PuzzleBoard : MonoBehaviour
     private Tile lastMovedTile;
     private Vector2 emptyTileCoord;
 
+    private bool cantMove => moving || settingUp;
+
     private void OnValidate()
     {
         UpdateBGBoardSize();
@@ -238,7 +240,7 @@ public class PuzzleBoard : MonoBehaviour
 
     public void OnKeyInput(BoardInput.InputDir input)
     {
-        if (moving)
+        if (cantMove)
             return;
 
         Vector2 movingDir = tileDirTable[(int)input] * -1;
@@ -309,7 +311,7 @@ public class PuzzleBoard : MonoBehaviour
 
     public void TryMoveTile(Tile tile)
     {
-        if (moving)
+        if (cantMove)
             return;
 
         if (!moveableTiles.ContainsKey(tile.moveableDir))

@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour
         this.board = board;
         this.indexID = indexID;
         this.ID = ID;
-        tmp.text = indexID + "";
+        tmp.text = indexID + 1 + "";
         //tmp.text = ID.x + "," + ID.y;
         coords = ID;
 
