@@ -7,10 +7,6 @@ public class BoardInput : MonoBehaviour
 {
     public UnityEvent<InputDir> inputEvent = new UnityEvent<InputDir>();
 
-    void Start()
-    {
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.W) | Input.GetKeyDown(KeyCode.UpArrow))

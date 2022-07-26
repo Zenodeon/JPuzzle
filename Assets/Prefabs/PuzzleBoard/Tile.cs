@@ -35,7 +35,6 @@ public class Tile : MonoBehaviour
     private Vector2 offset;
 
     public Vector2 moveableDir = Vector2.zero;
-
     public bool masterSlider = false;
 
     public UnityEvent<Tile, Vector2, int> OnMoved = new UnityEvent<Tile, Vector2, int>();
@@ -46,7 +45,7 @@ public class Tile : MonoBehaviour
         this.indexID = indexID;
         this.ID = ID;
         tmp.text = indexID + 1 + "";
-        //tmp.text = ID.x + "," + ID.y;
+
         coords = ID;
 
         UpdateTransform(size, spacing, offset);
