@@ -62,6 +62,8 @@ public class PuzzleBoard : MonoBehaviour
 
         if (RootCanvas._instance)
             canvasScale = RootCanvas._instance.canvasScale;
+        else
+            return;
 
         Vector2 boardSize = (bgBoard.rectTransform.sizeDelta * 0.5f) * canvasScale;
         Vector2 tlSize = tSize * canvasScale;
