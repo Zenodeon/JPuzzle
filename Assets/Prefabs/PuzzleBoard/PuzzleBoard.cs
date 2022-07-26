@@ -10,6 +10,7 @@ public class PuzzleBoard : MonoBehaviour
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private RectTransform board;
     [SerializeField] private RectTransform tileHolderRect;
+    [SerializeField] private BoardUIController boardUIController;
     [SerializeField] private Tile tilePrefab;
     [Space]
     [SerializeField][ReadOnly] private int shuffleCount = 0;
@@ -86,6 +87,8 @@ public class PuzzleBoard : MonoBehaviour
     void Start()
     {
         UpdateBoardData();
+        UpdateBGBoardSize();
+
         GenerateBoard();
     }
     #endregion
@@ -106,6 +109,8 @@ public class PuzzleBoard : MonoBehaviour
 
     private void UpdateBoardData()
     {
+        boardUIController.Setup(brdD);
+
         brdD.gridSize = gridSize;
 
         brdD.tileSize = tileSize;
@@ -124,7 +129,7 @@ public class PuzzleBoard : MonoBehaviour
             tile.Value.UpdateTransform();
     }
 
-    private void UpdateBGBoardSize()
+    public void UpdateBGBoardSize()
     {
         if (!board)
             return;
@@ -391,8 +396,10 @@ public class PuzzleBoard : MonoBehaviour
 
     private void GameWon()
     {
+        settingUp = true;
         ClearMoveableTiles();
-        Debug.Log("Game : " + moves);
+
+        Debug.Log("Solved in : " + moves);
     }
 
     public void ReGenerateBoard()

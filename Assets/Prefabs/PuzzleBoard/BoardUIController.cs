@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BoardUIController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private TextMeshProUGUI moveCountDisplay;
+
+    private BoardData boardData;
+
+    public void Setup(BoardData boardData)
     {
-        
+        this.boardData = boardData;
+
+        boardData.OnDataUpdated.RemoveListener(UpdateUI);
+        boardData.OnDataUpdated.AddListener(UpdateUI);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateUI()
     {
-        
+        moveCountDisplay.text = "Moves : " + boardData.moves;
     }
 }
