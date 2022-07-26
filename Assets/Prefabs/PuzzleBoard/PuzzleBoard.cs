@@ -25,8 +25,8 @@ public class PuzzleBoard : MonoBehaviour
     private Dictionary<Vector2, Tile> tileCoordListBuffer = new Dictionary<Vector2, Tile>();
     private Dictionary<Vector2, Tile> moveableTiles = new Dictionary<Vector2, Tile>();
     private Dictionary<Vector2, List<Tile>> slidableTiles = new Dictionary<Vector2, List<Tile>>();
-
     private List<Tile> tiles = new List<Tile>();
+
     private Tile lastMovedTile;
     private Vector2 emptyTileCoord;
     private bool moving = false;
@@ -86,7 +86,12 @@ public class PuzzleBoard : MonoBehaviour
     void Start()
     {
         UpdateBoardData();
+        GenerateBoard();
+    }
+    #endregion
 
+    private void GenerateBoard()
+    {
         settingUp = true;
 
         shuffleCount = (int)((gSize.x * gSize.y) * (gSize.x + gSize.y));
@@ -98,7 +103,6 @@ public class PuzzleBoard : MonoBehaviour
         RemoveLastTile();
         ShuffleTile(tileShuffedCount);
     }
-    #endregion
 
     private void UpdateBoardData()
     {
@@ -152,6 +156,7 @@ public class PuzzleBoard : MonoBehaviour
         if (index > shuffleCount)
         {
             settingUp = false;
+            moving = false;
             SetMoveableTiles(emptyTileCoord);
             return;
         }
@@ -388,5 +393,27 @@ public class PuzzleBoard : MonoBehaviour
     {
         ClearMoveableTiles();
         Debug.Log("Game : " + moves);
+    }
+
+    public void ReGenerateBoard()
+    {
+        tileIDList.Clear();
+        tileCoordList.Clear();
+        tileCoordListBuffer.Clear();
+        moveableTiles.Clear();
+        slidableTiles.Clear();
+
+        foreach (Tile tile in tiles)
+            Destroy(tile.gameObject);
+        tiles.Clear();
+
+        lastMovedTile = null;
+        emptyTileCoord = Vector2.one * -1;
+        tileShuffedCount = 0;
+
+        moving = true;
+        settingUp = true;
+
+        GenerateBoard();
     }
 }
