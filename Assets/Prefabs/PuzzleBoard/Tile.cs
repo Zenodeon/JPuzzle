@@ -37,6 +37,8 @@ public class Tile : MonoBehaviour
 
     public UnityEvent<Tile, Vector2, int> OnMoved = new UnityEvent<Tile, Vector2, int>();
 
+    private Tween tween;
+
     public void Setup(PuzzleBoard board, int indexID, Vector2 ID, BoardData boardData)
     {
         this.board = board;
@@ -62,10 +64,10 @@ public class Tile : MonoBehaviour
         previousCoords = coords;
 
         Vector2 newCoord = coords + moveableDir;
-        DOTween.To(() => coords, x => coords = x, newCoord, mode == 1 ? setupMovementDuration : movementDuration)
+        tween = DOTween.To(() => coords, x => coords = x, newCoord, mode == 1 ? setupMovementDuration : movementDuration)
             .SetEase(movementCurve)
             .OnUpdate(UpdateTransform)
-            .OnComplete(() => OnMoved.Invoke(this, previousCoords, mode));
+            .OnComplete(() => OnMoved.Invoke(this, previousCoords, mode)).SetAutoKill(true);
     }
 
     public void SelfMove()
@@ -91,5 +93,12 @@ public class Tile : MonoBehaviour
 
         if (moveableDir == Vector2.down)
             bm.showMaskGraphic = true;
+    }
+
+    public void Destroy()
+    {
+        if (tween != null)
+            tween.Kill();
+        Destroy(this.gameObject);
     }
 }

@@ -404,16 +404,17 @@ public class PuzzleBoard : MonoBehaviour
         slidableTiles.Clear();
 
         foreach (Tile tile in tiles)
-            Destroy(tile.gameObject);
+            tile.Destroy();
         tiles.Clear();
 
         lastMovedTile = null;
         emptyTileCoord = Vector2.one * -1;
         tileShuffedCount = 0;
 
+        moves = 0;
+
         moving = true;
         settingUp = true;
-
         GenerateBoard();
     }
 }
