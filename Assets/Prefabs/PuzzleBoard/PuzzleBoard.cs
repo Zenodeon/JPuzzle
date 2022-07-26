@@ -30,16 +30,28 @@ public class PuzzleBoard : MonoBehaviour
     private Tile lastMovedTile;
     private Vector2 emptyTileCoord;
     private bool moving = false;
-    private int moves = 0;
 
     private bool settingUp;
     private int tileShuffedCount = 0;
 
     private bool cantMove => moving || settingUp;
 
+    public BoardData brdD = new BoardData();
+
+    private Vector2 gSize => brdD.gridSize;
+
+    private Vector2 tSize => brdD.tileSize;
+    private Vector2 tSpacing => brdD.tileSpacing;
+    private float brdTPercent => brdD.borderTilePercent;
+
+    private int moves { get => brdD.moves; set => brdD.moves = value; }
+
+
     #region Unity Events
     private void OnValidate()
     {
+        UpdateBoardData();
+
         UpdateBGBoardSize();
         UpdateTiles();
     }
@@ -52,30 +64,32 @@ public class PuzzleBoard : MonoBehaviour
             canvasScale = RootCanvas._instance.canvasScale;
 
         Vector2 boardSize = (bgBoard.rectTransform.sizeDelta * 0.5f) * canvasScale;
-        Vector2 tSize = tileSize * canvasScale;
-        Vector2 tSizeHalf = tSize * 0.5f;
-        Vector2 tSpacing = tileSpacing * canvasScale;
-        Vector2 topLeftBoardPosition = new Vector2(rectTransform.position.x - boardSize.x + tSizeHalf.x, rectTransform.position.y + boardSize.y - tSizeHalf.y);
+        Vector2 tlSize = tSize * canvasScale;
+        Vector2 tlSizeHalf = tlSize * 0.5f;
+        Vector2 tlSpacing = tSpacing * canvasScale;
+        Vector2 topLeftBoardPosition = new Vector2(rectTransform.position.x - boardSize.x + tlSizeHalf.x, rectTransform.position.y + boardSize.y - tlSizeHalf.y);
 
-        topLeftBoardPosition = topLeftBoardPosition - ((tSize * borderTilePercent) * canvasScale * new Vector2(-1, 1));
+        topLeftBoardPosition = topLeftBoardPosition - ((tlSize * brdTPercent) * canvasScale * new Vector2(-1, 1));
 
         Gizmos.color = Color.blue;
-        for (int x = 0; x < gridSize.x; x++)
-            for (int y = 0; y < gridSize.y; y++)
+        for (int x = 0; x < gSize.x; x++)
+            for (int y = 0; y < gSize.y; y++)
             {
                 Vector2 coord = new Vector2(x, -y);
-                Vector2 position = coord * (tSize + tSpacing) + topLeftBoardPosition;
-                Gizmos.DrawWireCube(position, tSize);
+                Vector2 position = coord * (tlSize + tlSpacing) + topLeftBoardPosition;
+                Gizmos.DrawWireCube(position, tlSize);
             }
     }
 
     void Start()
     {
+        UpdateBoardData();
+
         settingUp = true;
 
-        shuffleCount = (int)((gridSize.x * gridSize.y) * (gridSize.x + gridSize.y));
+        shuffleCount = (int)((gSize.x * gSize.y) * (gSize.x + gSize.y));
 
-        foreach (Vector2 dir in tileDirTable)
+        foreach (Vector2 dir in BoardData.dirTable)
             slidableTiles.Add(dir, new List<Tile>());
 
         PlaceTiles();
@@ -84,11 +98,24 @@ public class PuzzleBoard : MonoBehaviour
     }
     #endregion
 
+    private void UpdateBoardData()
+    {
+        brdD.gridSize = gridSize;
+
+        brdD.tileSize = tileSize;
+        brdD.tileSpacing = tileSpacing;
+        brdD.borderTilePercent = borderTilePercent;
+
+        brdD.moves = moves;
+
+        brdD.OnDataUpdated.Invoke();
+    }
+
     [Button]
     private void UpdateTiles()
     {
         foreach (var tile in tileIDList)
-            tile.Value.UpdateTransform(tileSize, tileSpacing, tileSize * borderTilePercent);
+            tile.Value.UpdateTransform();
     }
 
     private void UpdateBGBoardSize()
@@ -97,19 +124,19 @@ public class PuzzleBoard : MonoBehaviour
             return;
 
         RectTransform bgbRect = bgBoard.rectTransform;
-        bgbRect.sizeDelta = (tileSize * gridSize) + (tileSpacing * (gridSize - Vector2.one)) + (tileSize * borderTilePercent * 2);
+        bgbRect.sizeDelta = (tSize * gSize) + (tSpacing * (gSize - Vector2.one)) + (tSize * brdTPercent * 2);
     }
 
     private void PlaceTiles()
     {
         int index = 0;
-        for (int y = 0; y < gridSize.y; y++)
-            for (int x = 0; x < gridSize.x; x++)
+        for (int y = 0; y < gSize.y; y++)
+            for (int x = 0; x < gSize.x; x++)
             {
                 Vector2 coord = new Vector2(x, -y);
 
                 Tile tile = GameObject.Instantiate(tilePrefab, tileHolderRect);
-                tile.Setup(this, index, coord, tileSize, tileSpacing, tileSize * borderTilePercent);
+                tile.Setup(this, index, coord, brdD);
 
                 tileIDList.Add(coord, tile);
                 tileCoordList.Add(coord, tile);
@@ -156,7 +183,7 @@ public class PuzzleBoard : MonoBehaviour
 
     private void RemoveLastTile()
     {
-        Vector2 lastTileID = new Vector2(gridSize.x - 1, -(gridSize.y - 1));
+        Vector2 lastTileID = new Vector2(gSize.x - 1, -(gSize.y - 1));
         Tile lastTile = tileIDList[lastTileID];
 
         Vector2 emptyTileCoord = lastTile.coords;
@@ -176,7 +203,7 @@ public class PuzzleBoard : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            Vector2 lookingDir = tileDirTable[i];
+            Vector2 lookingDir = BoardData.dirTable[i];
 
             Vector2 nearByTileCoord = emptyTileCoord + lookingDir;
             if (tileCoordList.ContainsKey(nearByTileCoord))
@@ -236,7 +263,7 @@ public class PuzzleBoard : MonoBehaviour
         if (cantMove)
             return;
 
-        Vector2 movingDir = tileDirTable[(int)input] * -1;
+        Vector2 movingDir = BoardData.dirTable[(int)input] * -1;
         if (moveableTiles.ContainsKey(movingDir))
             MoveTile(moveableTiles[movingDir]);
     }
@@ -341,10 +368,10 @@ public class PuzzleBoard : MonoBehaviour
 
     private bool CheckTileOrder()
     {
-        for (int y = 0; y < gridSize.y; y++)
-            for (int x = 0; x < gridSize.x; x++)
+        for (int y = 0; y < gSize.y; y++)
+            for (int x = 0; x < gSize.x; x++)
             {
-                if (gridSize == new Vector2(x + 1, y + 1))
+                if (gSize == new Vector2(x + 1, y + 1))
                     break;
 
                 Vector2 coord = new Vector2(x, -y);
@@ -361,12 +388,4 @@ public class PuzzleBoard : MonoBehaviour
         ClearMoveableTiles();
         Debug.Log("Game : " + moves);
     }
-
-    public readonly List<Vector2> tileDirTable = new List<Vector2>()
-    {
-        Vector2.left,
-        Vector2.up,
-        Vector2.right,
-        Vector2.down
-    };
 }

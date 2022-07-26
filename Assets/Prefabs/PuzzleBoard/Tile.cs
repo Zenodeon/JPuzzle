@@ -30,16 +30,14 @@ public class Tile : MonoBehaviour
 
     private PuzzleBoard board;
 
-    private Vector2 size;
-    private Vector2 spacing;
-    private Vector2 offset;
+    private BoardData brdD;
 
     public Vector2 moveableDir = Vector2.zero;
     public bool masterSlider = false;
 
     public UnityEvent<Tile, Vector2, int> OnMoved = new UnityEvent<Tile, Vector2, int>();
 
-    public void Setup(PuzzleBoard board, int indexID, Vector2 ID, Vector2 size, Vector2 spacing, Vector2 offset)
+    public void Setup(PuzzleBoard board, int indexID, Vector2 ID, BoardData boardData)
     {
         this.board = board;
         this.indexID = indexID;
@@ -48,22 +46,15 @@ public class Tile : MonoBehaviour
 
         coords = ID;
 
-        UpdateTransform(size, spacing, offset);
-    }
-
-    public void UpdateTransform(Vector2 size, Vector2 spacing, Vector2 offset)
-    {
-        this.size = size;
-        this.spacing = spacing * new Vector2(1, 1);
-        this.offset = offset * new Vector2(1, -1);
+        brdD = boardData;
 
         UpdateTransform();
     }
 
     public void UpdateTransform()
     {
-        rectTransform.sizeDelta = size;
-        rectTransform.anchoredPosition = (coords * (size + spacing)) + offset;
+        rectTransform.sizeDelta = brdD.tileSize;
+        rectTransform.anchoredPosition = (coords * (brdD.tileSize + brdD.tileSpacing)) + brdD.tileOffset;
     }
 
     public void Move(int mode = 0)
