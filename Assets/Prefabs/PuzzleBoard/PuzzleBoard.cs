@@ -86,7 +86,6 @@ public class PuzzleBoard : MonoBehaviour
     void Start()
     {
         UpdateBoardData();
-        UpdateBGBoardSize();
 
         GenerateBoard();
     }

@@ -21,4 +21,14 @@ public class BoardUIController : MonoBehaviour
     {
         moveCountDisplay.text = "Moves : " + boardData.moves;
     }
+
+    public void UpdateBoardBorderSize(float size)
+    {
+        boardData.borderTilePercent = size;
+    }
+
+    private void RaiseDataChangedEvent()
+    {
+        boardData.OnDataUpdated.Invoke();
+    }
 }
