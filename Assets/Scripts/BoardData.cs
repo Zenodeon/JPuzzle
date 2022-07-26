@@ -14,16 +14,7 @@ public class BoardData
     public float borderTilePercent;
     public Vector2 tileOffset => (tileSize * borderTilePercent) * new Vector2(1, -1);
 
-    private int _moves;
-    public int moves
-    {
-        get => _moves;
-        set
-        {
-            _moves = value;
-            OnDataUpdated.Invoke();
-        }
-    }
+    public int moves;
 
     public static readonly List<Vector2> dirTable = new List<Vector2>()
     {
