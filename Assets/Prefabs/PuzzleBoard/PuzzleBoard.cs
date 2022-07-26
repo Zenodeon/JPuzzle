@@ -8,7 +8,7 @@ using NaughtyAttributes;
 public class PuzzleBoard : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private Image bgBoard;
+    [SerializeField] private RectTransform board;
     [SerializeField] private RectTransform tileHolderRect;
     [SerializeField] private Tile tilePrefab;
     [Space]
@@ -65,7 +65,7 @@ public class PuzzleBoard : MonoBehaviour
         else
             return;
 
-        Vector2 boardSize = (bgBoard.rectTransform.sizeDelta * 0.5f) * canvasScale;
+        Vector2 boardSize = (board.sizeDelta * 0.5f) * canvasScale;
         Vector2 tlSize = tSize * canvasScale;
         Vector2 tlSizeHalf = tlSize * 0.5f;
         Vector2 tlSpacing = tSpacing * canvasScale;
@@ -122,11 +122,10 @@ public class PuzzleBoard : MonoBehaviour
 
     private void UpdateBGBoardSize()
     {
-        if (!bgBoard)
+        if (!board)
             return;
 
-        RectTransform bgbRect = bgBoard.rectTransform;
-        bgbRect.sizeDelta = (tSize * gSize) + (tSpacing * (gSize - Vector2.one)) + (tSize * brdTPercent * 2);
+        board.sizeDelta = (tSize * gSize) + (tSpacing * (gSize - Vector2.one)) + (tSize * brdTPercent * 2);
     }
 
     private void PlaceTiles()
