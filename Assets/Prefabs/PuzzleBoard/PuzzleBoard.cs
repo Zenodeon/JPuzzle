@@ -43,14 +43,17 @@ public class PuzzleBoard : MonoBehaviour
     private Vector2 tSpacing => brdD.tileSpacing;
     private float brdTPercent => brdD.borderTilePercent;
 
-    private int moves { get => brdD.moves; set 
+    private int moves
+    {
+        get => brdD.moves; set
         {
-            brdD.moves = value; 
+            brdD.moves = value;
             brdD.OnDataUpdated.Invoke();
 
             if (value == 1)
                 boardUIController.StartTimer();
-        } }
+        }
+    }
 
     private Tween tileTweener;
 
