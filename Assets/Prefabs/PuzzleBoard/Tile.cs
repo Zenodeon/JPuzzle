@@ -60,7 +60,7 @@ public class Tile : MonoBehaviour
             bgFill.color = Color.white;
             bgFill.sprite = TileMaker._instance.spriteTiles[ID];
 
-            //tmp.text = "";
+            tmp.text = "";
         }
 
         UpdateTransform();

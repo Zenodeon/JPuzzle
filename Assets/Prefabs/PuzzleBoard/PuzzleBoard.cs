@@ -57,6 +57,8 @@ public class PuzzleBoard : MonoBehaviour
 
     private Tween tileTweener;
 
+    Tile lastTile;
+
     #region Unity Events
     private void OnValidate()
     {
@@ -225,7 +227,10 @@ public class PuzzleBoard : MonoBehaviour
         tiles.Remove(lastTile);
         tileIDList.Remove(lastTileID);
         tileCoordList.Remove(lastTile.coords);
-        Destroy(lastTile.gameObject);
+
+        lastTile.gameObject.SetActive(false);
+        this.lastTile = lastTile;
+        //Destroy(lastTile.gameObject);
 
         SetMoveableTiles(emptyTileCoord);
     }
@@ -423,6 +428,8 @@ public class PuzzleBoard : MonoBehaviour
         settingUp = true;
         ClearMoveableTiles();
 
+        ReAddLastTile();
+
         float percent = 1;
         tileTweener = DOTween.To(() => percent, x => percent = x, 0, 4f)
             .OnUpdate(() =>
@@ -433,6 +440,15 @@ public class PuzzleBoard : MonoBehaviour
             });
 
         boardUIController.endWindow.ShowWindow(0.4f);
+    }
+
+    private void ReAddLastTile()
+    {
+        tiles.Add(lastTile);
+        tileIDList.Add(lastTile.ID, lastTile);
+        tileCoordList.Add(lastTile.coords, lastTile);
+
+        lastTile.gameObject.SetActive(true);
     }
 
     public void ReGenerateBoard()

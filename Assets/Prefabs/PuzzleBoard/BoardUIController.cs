@@ -105,6 +105,7 @@ public class BoardUIController : MonoBehaviour
             return;
         }
 
+        boardData.textureAvail = false;
         UpdateBoardSettings();
     }
 
@@ -117,12 +118,13 @@ public class BoardUIController : MonoBehaviour
         boardData.borderTilePercent = btp;
         boardData.gridSize = new Vector2(gridXSizeSlider.value, gridYSizeSlider.value);
 
-        float avgGridSize = boardData.gridSize.y;      
+        float avgGridSize = boardData.gridSize.y;
         float tSize = MathUtility.RangedMapClamp(avgGridSize, 2, 6, 250, 150);
 
-        boardData.tileSize = tSize * Vector2.one ;
+        boardData.tileSize = tSize * Vector2.one;
 
-        boardData.textureAvail = textureAvail;
+        if (!boardData.textureAvail)
+            boardData.textureAvail = textureAvail;
 
         boardData.OnDataUpdated.Invoke();
         boardData.puzzleBoard.ReGenerateBoard();

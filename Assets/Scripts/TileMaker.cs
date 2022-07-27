@@ -80,7 +80,6 @@ public class TileMaker : MonoBehaviour
                 spriteTiles.Add(new Vector2(x, -y), sprite);
 
                 progress.x++;
-                Debug.Log(progress.x + " : Done");
             }
 
         OnGenerationDone();
