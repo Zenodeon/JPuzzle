@@ -21,6 +21,8 @@ public class BoardData
     public int totalShuffleCount = 0;
     public int currentShuffleCount = 0;
 
+    public bool textureAvail = false;
+
     public static readonly List<Vector2> dirTable = new List<Vector2>()
     {
         Vector2.left,

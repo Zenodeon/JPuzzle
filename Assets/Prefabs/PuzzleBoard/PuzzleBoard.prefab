@@ -2299,6 +2299,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: texture
+      value: 
+      objectReference: {fileID: 2800000, guid: bf9692898625a66459387d6987b22872, type: 3}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5001828262193515578}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTileTexture
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BoardUIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
 --- !u!224 &80388256383347351 stripped
@@ -2646,6 +2678,38 @@ PrefabInstance:
     - target: {fileID: 2081285135424694562, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: texture
+      value: 
+      objectReference: {fileID: 2800000, guid: df2df6887b711f64392af97eb2a451d6, type: 3}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5001828262193515578}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTileTexture
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BoardUIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
@@ -3200,6 +3264,34 @@ PrefabInstance:
     - target: {fileID: 2081285135424694562, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5001828262193515578}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTileTexture
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BoardUIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001286728131227146, guid: 4649efbe4d1f387478df8498a202046f, type: 3}
+      propertyPath: OnStyleChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4649efbe4d1f387478df8498a202046f, type: 3}

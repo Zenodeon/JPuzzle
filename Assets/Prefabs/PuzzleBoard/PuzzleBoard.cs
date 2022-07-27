@@ -95,6 +95,8 @@ public class PuzzleBoard : MonoBehaviour
 
     void Start()
     {
+        boardUIController.Setup(brdD);
+
         UpdateBoardData();
 
         GenerateBoard();
@@ -119,8 +121,6 @@ public class PuzzleBoard : MonoBehaviour
 
     private void UpdateBoardData()
     {
-        boardUIController.Setup(brdD);
-
         brdD.puzzleBoard = this;
 
         brdD.gridSize = gridSize;

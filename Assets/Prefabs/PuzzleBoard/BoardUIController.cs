@@ -33,6 +33,8 @@ public class BoardUIController : MonoBehaviour
     {
         this.boardData = boardData;
 
+        TileMaker._instance.boardUIController = this;
+
         boardData.OnDataUpdated.RemoveListener(UpdateUI);
         boardData.OnDataUpdated.AddListener(UpdateUI);
     }
@@ -95,7 +97,18 @@ public class BoardUIController : MonoBehaviour
         gridSizeDisplay.text = $"Tile Layout : {gridXSizeSlider.value}x{gridYSizeSlider.value}";
     }
 
-    public void UpdateBoardSettings()
+    public void ChangeTileTexture(Texture2D texture)
+    {
+        if(texture != null)
+        {
+            TileMaker._instance.GenerateTextureTiles(texture, new Vector2(gridXSizeSlider.value, gridYSizeSlider.value));
+            return;
+        }
+
+        UpdateBoardSettings();
+    }
+
+    public void UpdateBoardSettings(bool textureAvail = false)
     {
         float btp = borderSizeSlider.value;
         if (btp != 0)
@@ -108,6 +121,8 @@ public class BoardUIController : MonoBehaviour
         float tSize = MathUtility.RangedMapClamp(avgGridSize, 2, 6, 250, 150);
 
         boardData.tileSize = tSize * Vector2.one ;
+
+        boardData.textureAvail = textureAvail;
 
         boardData.OnDataUpdated.Invoke();
         boardData.puzzleBoard.ReGenerateBoard();

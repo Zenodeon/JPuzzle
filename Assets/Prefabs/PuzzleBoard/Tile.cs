@@ -54,6 +54,11 @@ public class Tile : MonoBehaviour
 
         brdD = boardData;
 
+        if(brdD.textureAvail)
+        {
+
+        }
+
         UpdateTransform();
     }
 

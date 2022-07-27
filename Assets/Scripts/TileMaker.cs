@@ -6,7 +6,9 @@ public class TileMaker : MonoBehaviour
 {
     public static TileMaker _instance;
 
-    Dictionary<Vector2, Texture2D> textureTiles = new Dictionary<Vector2, Texture2D>();
+    public BoardUIController boardUIController;
+
+    Dictionary<Vector2, Sprite> textureTiles = new Dictionary<Vector2, Sprite>();
 
     private Texture2D texture;
 
@@ -18,6 +20,8 @@ public class TileMaker : MonoBehaviour
 
     private Vector2 progress;
 
+    private Coroutine coroutine;
+
     public void Awake()
     {
         _instance = this;
@@ -25,6 +29,10 @@ public class TileMaker : MonoBehaviour
 
     public void GenerateTextureTiles(Texture2D texture, Vector2 gridSize)
     {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+        textureTiles.Clear();
+
         this.texture = texture;
         this.gridSize = gridSize;
 
@@ -36,12 +44,12 @@ public class TileMaker : MonoBehaviour
             targetTileSize = (int)(textureSize.y / gridSize.y);
 
         progress.y = gridSize.x * gridSize.y;
-        StartCoroutine(ExtractTileTexture());
+        coroutine = StartCoroutine(ExtractTileTexture());
     }
 
     public void OnGenerationDone()
     {
-
+        boardUIController.UpdateBoardSettings(textureAvail: true);
     }
 
     IEnumerator ExtractTileTexture()
@@ -64,7 +72,11 @@ public class TileMaker : MonoBehaviour
                         tileTexture.SetPixel(px, py, pixel);
                     }
 
-                textureTiles.Add(new Vector2(x, -y), tileTexture);
+                yield return null;
+
+                Sprite sprite = Sprite.Create(tileTexture, new Rect(), Vector2.one * 0.5f);
+
+                textureTiles.Add(new Vector2(x, -y), sprite);
 
                 progress.x++;
                 Debug.Log(progress.x + " : Done");
