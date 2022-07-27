@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using DG.Tweening;
+
 public class Bar : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private RectTransform rectTransform;
 
-    // Update is called once per frame
-    void Update()
+    public float startWidth;
+    public float endWidth;
+
+    public float duration;
+
+    public void UpdatePercent(float value)
     {
-        
+        float percent = Mathf.Clamp(value, 0, 1);
+
+        float newWidth = MathUtility.RangedMapClamp(percent, 0, 1, startWidth, endWidth);
+        Vector2 newSize = new Vector2(newWidth, rectTransform.sizeDelta.y);
+
+        rectTransform.DOSizeDelta(newSize, duration);
     }
 }

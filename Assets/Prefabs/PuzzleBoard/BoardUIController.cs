@@ -11,6 +11,7 @@ public class BoardUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moveCountDisplay;
     [Space]
     [SerializeField] private TextMeshProUGUI timerDisplay;
+    [SerializeField] private Bar timerBar;
     [Space]
     [SerializeField] private TextMeshProUGUI borderSizeDisplay;
     [SerializeField] private UnityEngine.UI.Slider borderSizeSlider;
@@ -41,6 +42,9 @@ public class BoardUIController : MonoBehaviour
     private void UpdateTimerDisplay()
     {
         timerDisplay.text = watch.Elapsed.ToString(@"mm\:ss");
+
+        int milSec = int.Parse(watch.Elapsed.ToString(@"ff"));
+        timerBar.UpdatePercent(MathUtility.RangedMapClamp(milSec, 0, 100, 0, 1));
     }
 
     public void StartTimer()
@@ -98,21 +102,12 @@ public class BoardUIController : MonoBehaviour
         boardData.gridSize = new Vector2(gridXSizeSlider.value, gridYSizeSlider.value);
 
         float avgGridSize = boardData.gridSize.y;      
-        float tSize = RangedMapClamp(avgGridSize, 2, 6, 250, 150);
+        float tSize = MathUtility.RangedMapClamp(avgGridSize, 2, 6, 250, 150);
 
         boardData.tileSize = tSize * Vector2.one ;
 
         boardData.OnDataUpdated.Invoke();
         boardData.puzzleBoard.ReGenerateBoard();
 
-    }
-
-    public static float RangedMapClamp(float value, float InMinimum, float InMaximum, float OutMinimum, float OutMaximum)
-    {
-        var InRange = InMaximum - InMinimum;
-        var OutRange = OutMaximum - OutMinimum;
-        var finalValue = ((value - InMinimum) * OutRange / InRange) + OutMinimum;
-
-        return finalValue;
     }
 }
