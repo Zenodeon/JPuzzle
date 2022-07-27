@@ -13,8 +13,6 @@ public class PuzzleBoard : MonoBehaviour
     [SerializeField] private BoardUIController boardUIController;
     [SerializeField] private Tile tilePrefab;
     [Space]
-    [SerializeField][ReadOnly] private int shuffleCount = 0;
-    [Space]
     [SerializeField][MinValue(2)][MaxValue(10)] public Vector2 gridSize;
     [Space]
     [SerializeField] public Vector2 tileSize;
@@ -33,7 +31,6 @@ public class PuzzleBoard : MonoBehaviour
     private bool moving = false;
 
     private bool settingUp;
-    private int tileShuffedCount = 0;
 
     private bool cantMove => moving || settingUp;
 
@@ -102,14 +99,16 @@ public class PuzzleBoard : MonoBehaviour
     {
         settingUp = true;
 
-        shuffleCount = (int)((gSize.x * gSize.y) * (gSize.x + gSize.y));
+        brdD.totalShuffleCount = (int)((gSize.x * gSize.y) * (gSize.x + gSize.y));
 
         foreach (Vector2 dir in BoardData.dirTable)
             slidableTiles.Add(dir, new List<Tile>());
 
         PlaceTiles();
         RemoveLastTile();
-        ShuffleTile(tileShuffedCount);
+
+        boardUIController.shufflingWindow.ShowWindow(brdD);
+        ShuffleTile(brdD.currentShuffleCount);
     }
 
     private void UpdateBoardData()
@@ -125,6 +124,8 @@ public class PuzzleBoard : MonoBehaviour
         brdD.borderTilePercent = borderTilePercent;
 
         brdD.moves = moves;
+
+        brdD.currentShuffleCount = 0;
 
         brdD.OnDataUpdated.Invoke();
     }
@@ -165,8 +166,12 @@ public class PuzzleBoard : MonoBehaviour
 
     private void ShuffleTile(int index)
     {
-        if (index > shuffleCount)
+        brdD.OnDataUpdated.Invoke();
+
+        if (index > brdD.totalShuffleCount)
         {
+            boardUIController.shufflingWindow.HideWindow();
+
             settingUp = false;
             moving = false;
             SetMoveableTiles(emptyTileCoord);
@@ -343,7 +348,7 @@ public class PuzzleBoard : MonoBehaviour
             tileCoordList.Add(movedTile.coords, movedTile);
 
             SetMoveableTiles(previousTileCoord);
-            ShuffleTile(tileShuffedCount++);
+            ShuffleTile(brdD.currentShuffleCount++);
             return;
         }
 
@@ -427,7 +432,7 @@ public class PuzzleBoard : MonoBehaviour
 
         lastMovedTile = null;
         emptyTileCoord = Vector2.one * -1;
-        tileShuffedCount = 0;
+        brdD.currentShuffleCount = 0;
 
         moves = 0;
 

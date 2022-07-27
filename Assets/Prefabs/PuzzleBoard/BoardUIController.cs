@@ -8,6 +8,8 @@ using System;
 
 public class BoardUIController : MonoBehaviour
 {
+    [SerializeField] public ShufflingWindow shufflingWindow;
+    [Space]
     [SerializeField] private TextMeshProUGUI moveCountDisplay;
     [Space]
     [SerializeField] private TextMeshProUGUI timerDisplay;

@@ -18,6 +18,9 @@ public class BoardData
 
     public int moves;
 
+    public int totalShuffleCount = 0;
+    public int currentShuffleCount = 0;
+
     public static readonly List<Vector2> dirTable = new List<Vector2>()
     {
         Vector2.left,
