@@ -7,6 +7,8 @@ public class BoardData
 {
     public UnityEvent OnDataUpdated = new UnityEvent();
 
+    public PuzzleBoard puzzleBoard;
+
     public Vector2 gridSize;
 
     public Vector2 tileSize;
