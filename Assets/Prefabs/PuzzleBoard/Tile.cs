@@ -13,6 +13,7 @@ public class Tile : MonoBehaviour
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] public TextMeshProUGUI tmp;
     [SerializeField] public Image bg;
+    [SerializeField] public Image bgFill;
     [Space]
     [SerializeField] private float setupMovementDuration = 0.03f;
     [SerializeField] private float movementDuration = 0.08f;
@@ -56,7 +57,10 @@ public class Tile : MonoBehaviour
 
         if(brdD.textureAvail)
         {
+            bgFill.color = Color.white;
+            bgFill.sprite = TileMaker._instance.spriteTiles[ID];
 
+            //tmp.text = "";
         }
 
         UpdateTransform();

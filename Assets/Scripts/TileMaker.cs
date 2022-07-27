@@ -8,7 +8,7 @@ public class TileMaker : MonoBehaviour
 
     public BoardUIController boardUIController;
 
-    Dictionary<Vector2, Sprite> textureTiles = new Dictionary<Vector2, Sprite>();
+    public Dictionary<Vector2, Sprite> spriteTiles = new Dictionary<Vector2, Sprite>();
 
     private Texture2D texture;
 
@@ -31,7 +31,7 @@ public class TileMaker : MonoBehaviour
     {
         if (coroutine != null)
             StopCoroutine(coroutine);
-        textureTiles.Clear();
+        spriteTiles.Clear();
 
         this.texture = texture;
         this.gridSize = gridSize;
@@ -61,9 +61,9 @@ public class TileMaker : MonoBehaviour
             for (int y = 0; y < gridSize.y; y++)
             {
                 int tXPos = targetTileSize * x;
-                int tYPos = targetTileSize * y;
+                int tYPos = targetTileSize * ((int)(gridSize.y - 1) - y);
 
-                Texture2D tileTexture = new Texture2D(targetTileSize, targetTileSize);
+                Texture2D tileTexture = new Texture2D(targetTileSize, targetTileSize, TextureFormat.ARGB32, false);
 
                 for (int px = 0; px < targetTileSize; px++)
                     for (int py = 0; py < targetTileSize; py++)
@@ -72,11 +72,12 @@ public class TileMaker : MonoBehaviour
                         tileTexture.SetPixel(px, py, pixel);
                     }
 
+                tileTexture.Apply();
                 yield return null;
 
-                Sprite sprite = Sprite.Create(tileTexture, new Rect(), Vector2.one * 0.5f);
+                Sprite sprite = Sprite.Create(tileTexture, new Rect(0, 0, targetTileSize, targetTileSize), Vector2.one * 0.5f);
 
-                textureTiles.Add(new Vector2(x, -y), sprite);
+                spriteTiles.Add(new Vector2(x, -y), sprite);
 
                 progress.x++;
                 Debug.Log(progress.x + " : Done");
