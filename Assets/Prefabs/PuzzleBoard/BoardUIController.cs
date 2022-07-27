@@ -9,7 +9,11 @@ using System;
 public class BoardUIController : MonoBehaviour
 {
     [SerializeField] public ShufflingWindow shufflingWindow;
+    [SerializeField] public GeneratingWindow generatingWindow;
     [SerializeField] public EndWindow endWindow;
+    [Space]
+    [SerializeField] private Slider slider3;
+    [SerializeField] private Image previewImage;
     [Space]
     [SerializeField] private TextMeshProUGUI moveCountDisplay;
     [Space]
@@ -97,20 +101,25 @@ public class BoardUIController : MonoBehaviour
         gridSizeDisplay.text = $"Tile Layout : {gridXSizeSlider.value}x{gridYSizeSlider.value}";
     }
 
-    public void ChangeTileTexture(Texture2D texture)
+    public void ChangeTileTexture(Sprite sprite, Texture2D texture)
     {
         if(texture != null)
         {
+            generatingWindow.ShowWindow();
+            slider3.ShowSlider(true);
+            previewImage.sprite = sprite;
             TileMaker._instance.GenerateTextureTiles(texture, new Vector2(gridXSizeSlider.value, gridYSizeSlider.value));
             return;
         }
 
-        boardData.textureAvail = false;
+        slider3.ShowSlider(false);
         UpdateBoardSettings();
     }
 
     public void UpdateBoardSettings(bool textureAvail = false)
     {
+        generatingWindow.HideWindow();
+
         float btp = borderSizeSlider.value;
         if (btp != 0)
             btp /= 10;
@@ -123,8 +132,7 @@ public class BoardUIController : MonoBehaviour
 
         boardData.tileSize = tSize * Vector2.one;
 
-        if (!boardData.textureAvail)
-            boardData.textureAvail = textureAvail;
+        boardData.textureAvail = textureAvail;
 
         boardData.OnDataUpdated.Invoke();
         boardData.puzzleBoard.ReGenerateBoard();

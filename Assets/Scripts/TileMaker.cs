@@ -18,7 +18,7 @@ public class TileMaker : MonoBehaviour
     private int targetTileSize;
     private Vector2 tileOffset;
 
-    private Vector2 progress;
+    public Vector2 progress;
 
     private Coroutine coroutine;
 
