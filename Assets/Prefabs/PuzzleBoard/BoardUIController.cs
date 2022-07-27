@@ -9,6 +9,7 @@ using System;
 public class BoardUIController : MonoBehaviour
 {
     [SerializeField] public ShufflingWindow shufflingWindow;
+    [SerializeField] public EndWindow endWindow;
     [Space]
     [SerializeField] private TextMeshProUGUI moveCountDisplay;
     [Space]
@@ -110,6 +111,5 @@ public class BoardUIController : MonoBehaviour
 
         boardData.OnDataUpdated.Invoke();
         boardData.puzzleBoard.ReGenerateBoard();
-
     }
 }

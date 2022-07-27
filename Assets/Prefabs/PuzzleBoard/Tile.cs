@@ -12,9 +12,13 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] public TextMeshProUGUI tmp;
+    [SerializeField] public Image bg;
     [Space]
     [SerializeField] private float setupMovementDuration = 0.03f;
     [SerializeField] private float movementDuration = 0.08f;
+    [Space]
+    [SerializeField] private float radiusValue;
+    [SerializeField] private float nonRadiusValue;
     [Space]
     [SerializeField] private AnimationCurve movementCurve;
     [Space]
@@ -57,6 +61,11 @@ public class Tile : MonoBehaviour
     {
         rectTransform.sizeDelta = brdD.tileSize;
         rectTransform.anchoredPosition = (coords * (brdD.tileSize + brdD.tileSpacing)) + brdD.tileOffset;
+    }
+
+    public void UpdateRadius(float percent)
+    {
+        bg.pixelsPerUnitMultiplier = MathUtility.RangedMapClamp(percent, 1, 0, radiusValue, nonRadiusValue);
     }
 
     public void Move(int mode = 0)

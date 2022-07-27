@@ -363,8 +363,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 5581870658721478613}
   tmp: {fileID: 7995954521225868550}
+  bg: {fileID: 6851073874188490333}
   setupMovementDuration: 0.03
   movementDuration: 0.08
+  radiusValue: 3
+  nonRadiusValue: 100
   movementCurve:
     serializedVersion: 2
     m_Curve:

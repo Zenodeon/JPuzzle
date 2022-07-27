@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using NaughtyAttributes;
+using DG.Tweening;
 
 public class PuzzleBoard : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class PuzzleBoard : MonoBehaviour
             if (value == 1)
                 boardUIController.StartTimer();
         } }
+
+    private Tween tileTweener;
 
     #region Unity Events
     private void OnValidate()
@@ -131,10 +134,15 @@ public class PuzzleBoard : MonoBehaviour
     }
 
     [Button]
-    private void UpdateTiles()
+    private void UpdateTiles(float percent = -1)
     {
         foreach (var tile in tileIDList)
+        {
             tile.Value.UpdateTransform();
+
+            if (percent != -1)
+                tile.Value.UpdateRadius(percent);
+        }
     }
 
     public void UpdateBGBoardSize()
@@ -412,11 +420,23 @@ public class PuzzleBoard : MonoBehaviour
         settingUp = true;
         ClearMoveableTiles();
 
-        Debug.Log("Solved in : " + moves);
+        float percent = 1;
+        tileTweener = DOTween.To(() => percent, x => percent = x, 0, 4f)
+            .OnUpdate(() =>
+            {
+                brdD.tileSpacing *= percent;
+                UpdateBGBoardSize();
+                UpdateTiles(percent);
+            });
+
+        boardUIController.endWindow.ShowWindow(0.4f);
     }
 
     public void ReGenerateBoard()
     {
+        tileTweener.Kill();
+        boardUIController.endWindow.HideWindow(0);
+
         boardUIController.StopTimer();
         boardUIController.ClearTimer();
 
@@ -438,6 +458,8 @@ public class PuzzleBoard : MonoBehaviour
 
         moving = true;
         settingUp = true;
+
+        brdD.tileSpacing = tileSpacing;
 
         UpdateBGBoardSize();
         GenerateBoard();
